@@ -1,0 +1,32 @@
+/*CSS*/
+/* ══ 29 · Polvo de estrellas en oro rosa bajo el nombre (versión premium de la demo) ══ */
+.px-wrap{display:block;position:relative;height:74px;margin:4px auto -26px;width:min(100%,360px);pointer-events:none}
+.px-horizon{display:block;position:absolute;left:50%;top:6px;transform:translateX(-50%);width:82%;height:1.5px;z-index:2;
+  background:linear-gradient(90deg,transparent,#B76E79 20%,#F7E7CE 50%,#D4AF37 80%,transparent);
+  box-shadow:0 0 16px 3px rgba(212,175,55,.35),0 0 30px 6px rgba(244,164,192,.3)}
+.px-horizon::after{content:"";position:absolute;left:36%;right:36%;top:-3px;height:7px;background:radial-gradient(closest-side,#fff8ec,transparent);filter:blur(3px)}
+.px-flare{display:block;position:absolute;left:50%;top:6px;width:200px;height:200px;margin:-100px 0 0 -100px;z-index:3;background:url(assets/flare.webp) center/contain no-repeat;mix-blend-mode:screen;opacity:.5;animation:pxFl 7s ease-in-out infinite}
+@keyframes pxFl{0%,100%{opacity:.3;transform:scale(.88)}50%{opacity:.68;transform:scale(1.04)}}
+.px-dust{position:absolute;left:0;top:7px;width:100%;height:66px;z-index:1;
+  -webkit-mask-image:radial-gradient(62% 100% at 50% 0%,#000 25%,transparent 100%);mask-image:radial-gradient(62% 100% at 50% 0%,#000 25%,transparent 100%)}
+@media (prefers-reduced-motion:reduce){.px-flare{animation:none}}
+/*HTML*/
+<span class="px-wrap" aria-hidden="true"><span class="px-horizon"></span><span class="px-flare"></span><canvas class="px-dust"></canvas></span>
+/*JS*/
+(function(){
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('canvas.px-dust').forEach(function(cv){
+    var g=cv.getContext('2d'),dpr=Math.min(2,window.devicePixelRatio||1),W,H,P=[],on=false;
+    var COL=['#B76E79','#D4AF37','#c98592','#E8C9A0'];
+    function size(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;if(!W||!H)return;cv.width=W*dpr;cv.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0);
+      P=[];var n=Math.round(W*H/150);for(var i=0;i<n;i++)P.push({x:Math.random()*W,y:Math.pow(Math.random(),1.6)*H,r:Math.random()*1.1+.35,ph:Math.random()*6.3,sp:.5+Math.random()*2.4,vx:(Math.random()-.5)*.08,vy:-(.02+Math.random()*.07),c:COL[i%4]})}
+    function f(t){g.clearRect(0,0,W,H);for(var i=0;i<P.length;i++){var p=P[i];if(!reduce){p.x+=p.vx;p.y+=p.vy;if(p.y<-2){p.y=H;p.x=Math.random()*W}}
+        var a=.5+.5*Math.sin(t/1000*p.sp+p.ph);a=a*a;g.globalAlpha=a;g.fillStyle=p.c;g.beginPath();g.arc(p.x,p.y,p.r,0,6.3);g.fill();
+        if(p.r>1.1&&a>.75){g.globalAlpha=(a-.75)*2.4;g.fillRect(p.x-3.2,p.y-.25,6.4,.5);g.fillRect(p.x-.25,p.y-3.2,.5,6.4)}}
+      if(on&&!reduce)requestAnimationFrame(f)}
+    size();addEventListener('resize',size);
+    function inView(){var r=cv.getBoundingClientRect();return r.width>0&&r.bottom>0&&r.top<innerHeight}
+    function kick(){var v=inView();if(v&&!on){size();on=true;requestAnimationFrame(f)}else if(!v)on=false}
+    new IntersectionObserver(kick).observe(cv);addEventListener('scroll',kick,{passive:true});setInterval(kick,1200);
+  });
+})();

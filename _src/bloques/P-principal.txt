@@ -1,0 +1,77 @@
+/*CSS*/
+/* ══ PRINCIPAL: menú abajo al centro + levitación ══ */
+.mx-btn{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(8px);z-index:997;
+  height:46px;padding:0 20px;display:flex;align-items:center;gap:10px;border-radius:999px;cursor:pointer;
+  background:rgba(249,244,253,.78);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border:1px solid rgba(183,110,121,.55);box-shadow:0 6px 22px rgba(90,50,110,.16);
+  font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;letter-spacing:.14em;text-transform:uppercase;color:#5a3a78;
+  opacity:0;visibility:hidden;transition:opacity .9s ease,transform .9s ease,visibility 0s linear .9s;-webkit-tap-highlight-color:transparent}
+.mx-btn.on{opacity:1;visibility:visible;transform:translateX(-50%);transition:opacity .9s ease,transform .9s ease}
+.mx-lines{display:flex;flex-direction:column;gap:4px}.mx-lines i{display:block;width:18px;height:1.5px;border-radius:2px;background:linear-gradient(90deg,#8f4f5b,#B76E79,#D4AF37)}
+.mx-lines i:nth-child(2){width:12px}
+.mx-panel{position:fixed;inset:0;z-index:2000;background:#F9F4FD;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .5s ease,visibility 0s linear .5s}
+.mx-panel.on{opacity:1;visibility:visible;transition:opacity .5s ease}
+.mx-panel::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 40% at 50% 0%,rgba(239,202,255,.7),transparent),radial-gradient(60% 40% at 50% 100%,rgba(244,164,192,.35),transparent);pointer-events:none}
+.mx-close{position:absolute;top:calc(14px + env(safe-area-inset-top));right:16px;width:44px;height:44px;border:0;background:none;font-size:34px;line-height:1;color:#5a3a78;cursor:pointer;font-family:'Cormorant Garamond',serif}
+.mx-rule{width:120px;height:1px;margin:0 0 18px;background:linear-gradient(90deg,transparent,#B76E79,#D4AF37,#B76E79,transparent);position:relative}
+.mx-list{list-style:none;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
+.mx-list a{display:block;padding:8px 18px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:23px;color:#4a2d6c;text-decoration:none;letter-spacing:.02em}
+.mx-list a:active{color:#B76E79}
+#hero ~ * .loc-card,.fam-padres,.dc-avoid-block{animation:levitate 6.5s ease-in-out infinite}
+.dc-avoid-block{animation-delay:-2.2s}.loc-card{animation-delay:-4.1s}
+@keyframes levitate{0%,100%{translate:0 0;rotate:0deg}30%{translate:0 -9px;rotate:.6deg}70%{translate:0 -4px;rotate:-.6deg}}
+.wrap{padding-bottom:84px}
+@media (prefers-reduced-motion:reduce){.loc-card,.fam-padres,.dc-avoid-block{animation:none}}
+/*HTML*/
+<button class="mx-btn" id="mxBtn" type="button" aria-label="Abrir menú"><span class="mx-lines"><i></i><i></i></span>Menú</button>
+<nav class="mx-panel" id="mxPanel" aria-label="Secciones" aria-hidden="true">
+  <button class="mx-close" id="mxClose" type="button" aria-label="Cerrar menú">&times;</button>
+  <div class="mx-rule"></div>
+  <ul class="mx-list">
+    <li><a href="#hero">Inicio</a></li>
+    <li><a href="#countdown">Cuenta regresiva</a></li>
+    <li><a href="#familia">Mis Padres</a></li>
+    <li><a href="#ubicacion">Ubicación</a></li>
+    <li><a href="#itinerario">Itinerario</a></li>
+    <li><a href="#dresscode">Vestimenta</a></li>
+    <li><a href="#galeria">Mis Momentos</a></li>
+    <li><a href="#regalos">Mesa de Regalos</a></li>
+    <li><a href="#rsvp">Confirmar asistencia</a></li>
+  </ul>
+</nav>
+/*JS*/
+(function(){
+  var btn=document.getElementById('mxBtn'),panel=document.getElementById('mxPanel'),close=document.getElementById('mxClose'),fab=document.getElementById('musicFab');
+  var auto={run:false,dead:false};
+  function stopAuto(){auto.dead=true;auto.run=false;}
+  function open(){stopAuto();panel.classList.add('on');panel.setAttribute('aria-hidden','false');}
+  function shut(){panel.classList.remove('on');panel.setAttribute('aria-hidden','true');}
+  btn.addEventListener('click',open);close.addEventListener('click',shut);
+  panel.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();shut();
+    var t=document.querySelector(a.getAttribute('href'));if(t){var y=t.getBoundingClientRect().top+scrollY-10;window.scrollTo({top:y,behavior:'smooth'});}});});
+  /* ── recorrido automático ── */
+  var q=location.search+location.hash;
+  var noAuto=/noauto/.test(q)||/#./.test(location.hash)||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+  ['wheel','touchstart','pointerdown','keydown'].forEach(function(ev){window.addEventListener(ev,function(e){
+    if(e.target&&e.target.closest&&e.target.closest('#mxBtn'))return; if(auto.run||!auto.dead)stopAuto();},{passive:true,capture:true});});
+  var lastY=-1;
+  window.addEventListener('scroll',function(){if(auto.run&&lastY>=0&&Math.abs(scrollY-lastY)>40)stopAuto();},{passive:true});
+  function slowAt(){var y=scrollY+innerHeight*.5,ids=['hero','galeria','quote'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(!el)continue;var r=el.getBoundingClientRect();if(r.top<innerHeight*.5&&r.bottom>innerHeight*.5)return .6;}return 1;}
+  function startAuto(){
+    if(noAuto||auto.dead)return;auto.run=true;var acc=scrollY,t0=null,prev=null;
+    function step(ts){
+      if(!auto.run)return;
+      if(document.hidden){prev=ts;requestAnimationFrame(step);return;}
+      if(t0===null){t0=ts;prev=ts;}
+      var dt=Math.min(64,ts-prev)/1000;prev=ts;
+      var ease=Math.min(1,(ts-t0)/1000);var max=document.documentElement.scrollHeight-innerHeight;
+      var rest=max-acc;if(rest<=1){auto.run=false;return;}
+      var v=37*ease*slowAt()*Math.min(1,rest/40+.15);
+      acc+=v*dt;lastY=Math.round(acc);window.scrollTo(0,acc);
+      requestAnimationFrame(step);}
+    requestAnimationFrame(step);}
+  function shown(){btn.classList.add('on');setTimeout(startAuto,2500);}
+  if(fab){if(fab.classList.contains('is-shown'))shown();else new MutationObserver(function(m,o){if(fab.classList.contains('is-shown')){o.disconnect();shown();}}).observe(fab,{attributes:true,attributeFilter:['class']});}
+  else shown();
+})();

@@ -1,0 +1,12 @@
+/* INSERTAR: al final de <style> en index.html */
+.adorno{position:absolute;z-index:-1;pointer-events:none;user-select:none;max-width:none;
+  animation:adFlota 12s ease-in-out infinite;animation-delay:var(--d,0s);will-change:transform,opacity}
+/* grandes, saliendo por una orilla, opacidad 0.15-0.3, ya difuminados en el PNG (sin filter:blur) */
+.adorno.a-sup-der{width:62%;top:-4%;right:-22%;opacity:.26;--d:-2s}
+.adorno.a-inf-izq{width:58%;bottom:-6%;left:-24%;opacity:.22;--d:-7s}
+.adorno.a-sup-izq{width:55%;top:-3%;left:-20%;opacity:.2;--d:-4s}
+.adorno.a-inf-der{width:60%;bottom:-5%;right:-22%;opacity:.24;--d:-9s}
+@keyframes adFlota{
+  0%,100%{transform:translate3d(0,-8px,0);opacity:calc(var(--o,.22) - .05)}
+  50%{transform:translate3d(0,8px,0);opacity:calc(var(--o,.22) + .05)}}
+@media (prefers-reduced-motion:reduce){.adorno{animation:none}}

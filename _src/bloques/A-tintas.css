@@ -1,0 +1,20 @@
+/* INSERTAR: al final de <style> en index.html (antes del bloque de legibilidad) */
+:root{--tinta-claro:#F9F4FD;--tinta-halo:rgba(249,244,253,.9)}
+.ink-sec{position:relative;isolation:isolate}
+.ink-bg{position:absolute;left:0;right:0;top:-180px;bottom:-180px;z-index:-2;overflow:hidden;pointer-events:none;
+  -webkit-mask-image:linear-gradient(transparent,#000 34%,#000 66%,transparent);mask-image:linear-gradient(transparent,#000 34%,#000 66%,transparent)}
+.ink-bg img{position:absolute;inset:-10%;width:120%;height:120%;object-fit:cover;max-width:none;
+  animation:inkDrift 22s ease-in-out infinite alternate;animation-delay:var(--d,0s);will-change:transform}
+.ink-bg.esp img{transform-origin:50% 50%;--sx:-1}
+@keyframes inkDrift{
+  0%{transform:translate3d(calc(var(--tx,4%)*-1),calc(var(--ty,3%)*-1),0) scale(calc(var(--sx,1)*1.02),1.02) rotate(calc(var(--rot,1.2deg)*-1))}
+  100%{transform:translate3d(var(--tx,4%),var(--ty,3%),0) scale(calc(var(--sx,1)*1.16),1.16) rotate(var(--rot,1.2deg))}}
+.ink-bg.i1 img{--tx:4%;--ty:2%;--rot:1.2deg;--d:-3s}
+.ink-bg.i2 img{--tx:-4%;--ty:3%;--rot:-1.2deg;--d:-9s}
+.ink-bg.i3 img{--tx:3%;--ty:-4%;--rot:.9deg;--d:-14s}
+.ink-bg.i4 img{--tx:-3%;--ty:-3%;--rot:-1deg;--d:-6s}
+.ink-bg.i5 img{--tx:4%;--ty:4%;--rot:1.1deg;--d:-18s}
+.ink-bg.i6 img{--tx:-4%;--ty:2%;--rot:-.8deg;--d:-11s}
+/* halo claro en textos sobre tinta */
+.ink-sec h1,.ink-sec h2,.ink-sec h3,.ink-sec p,.ink-sec .eyebrow,.ink-sec .lbl{text-shadow:0 0 14px var(--tinta-halo),0 0 4px var(--tinta-halo)}
+@media (prefers-reduced-motion:reduce){.ink-bg img{animation:none}}

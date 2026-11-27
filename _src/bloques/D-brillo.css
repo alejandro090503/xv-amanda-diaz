@@ -1,0 +1,87 @@
+/* INSERTAR: antes de <\/style> (orden 3 de CSS, después de E-luz-ajustes.css) · D-brillo: foil rosa oro + dorado en títulos y filo de luz en tarjetas */
+:root{
+  /* metálico de la invitación: rosa oro oscuro → rosa oro → dorado (pico, nunca blanco en fondo claro) → rosa oro → oscuro */
+  --foil:linear-gradient(100deg,#7D3F4C 0%,#B76E79 27%,#D4AF37 50%,#B76E79 73%,#7D3F4C 100%);
+  --dx-glow:183,110,121;
+}
+
+/* ── Títulos y textos metálicos: el metalSweep plata se sustituye por goldSweep rosa oro ── */
+.metal,.script-title.metal,.cd-num,.hero-amp,.rsvp-para-nombre{
+  background:var(--foil)!important;background-size:220% 100%!important;
+  -webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;
+  color:#7D3F4C;animation:goldSweep 7s ease-in-out infinite!important;
+  filter:drop-shadow(0 0 6px rgba(var(--dx-glow),.22))!important;
+  /* sin cortes en las mayúsculas script durante el barrido */
+  padding:.22em .45em;margin:-.22em -.45em;line-height:1.25;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone}
+.script-title.metal{margin:-.22em -.45em calc(4px - .22em)}
+.cd-num{padding:.06em .1em;margin:-.06em -.1em;line-height:inherit}
+@keyframes goldSweep{0%,100%{background-position:0% 0}50%{background-position:100% 0}}
+.script-title.metal:nth-of-type(2n){animation-delay:-2.4s!important}
+.quote-sig.metal{animation-delay:-1.3s!important}
+.footer-names.metal{animation-delay:-3.6s!important}
+
+/* ── Destellos de lente (assets/flare*.webp): reposo .6, florecen a 1 / 1.15, uno a la vez ── */
+.dx-flare{position:absolute;left:var(--x,50%);top:var(--y,0);width:0;height:0;z-index:5;pointer-events:none}
+.dx-flare b{position:absolute;left:0;top:0;display:block;width:calc(190px*var(--s,1));height:calc(190px*var(--s,1));
+  margin:calc(-95px*var(--s,1)) 0 0 calc(-95px*var(--s,1));background:url(assets/flare.webp) center/contain no-repeat;
+  opacity:.6;transform:scale(.8);animation:dxBloom var(--dur,8s) cubic-bezier(.45,0,.3,1) infinite;animation-delay:var(--del,0s)}
+.dx-flare.is-mini b{background-image:url(assets/flare-mini.webp);width:calc(76px*var(--s,1));height:calc(76px*var(--s,1));
+  margin:calc(-38px*var(--s,1)) 0 0 calc(-38px*var(--s,1));animation-name:dxTwinkle}
+@keyframes dxBloom{0%,34%{opacity:.6;transform:scale(.8)}48%{opacity:1;transform:scale(1.15)}56%{opacity:.9;transform:scale(1)}74%,100%{opacity:.6;transform:scale(.8)}}
+@keyframes dxTwinkle{0%,40%{opacity:0;transform:scale(.3) rotate(-18deg)}50%{opacity:1;transform:scale(1) rotate(0)}62%,100%{opacity:0;transform:scale(.3) rotate(16deg)}}
+.dx-tit{position:relative}
+
+/* ── Tarjetas: familia, ubicación, regalos y RSVP ── */
+.dx-card{position:relative;
+  /* filo de 1.5 px con dirección de luz: arriba-izq. dorado claro, costados rosa oro tenue, rebote rosa abajo-der. (en fondo claro nunca blanco) */
+  background:linear-gradient(var(--dx-fill,#fff),var(--dx-fill,#fff)) padding-box,
+    linear-gradient(138deg,#D4AF37 0%,#F2D9A6 7%,rgba(183,110,121,.62) 20%,rgba(183,110,121,.3) 42%,rgba(183,110,121,.26) 62%,rgba(244,164,192,.7) 86%,#B76E79 100%) border-box!important;
+  background-size:100% 100%,100% 100%!important;border:1.5px solid transparent!important;animation:none!important;
+  box-shadow:0 18px 40px -20px rgba(125,63,76,.35),0 0 42px -10px rgba(var(--dx-glow),.32),inset 0 1px 0 rgba(255,255,255,.9)!important}
+.fam-col.dx-card,.fam-hijos.dx-card{--dx-fill:rgba(255,255,255,.86)}
+.corte-item.dx-card{--dx-fill:rgba(255,255,255,.88)}
+/* halo de luz que entra por arriba a la izquierda y rebota abajo a la derecha */
+.dx-halo{position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;z-index:0;
+  background:radial-gradient(150px 90px at 8% 0,rgba(212,175,55,.16),transparent 72%),radial-gradient(130px 80px at 92% 100%,rgba(244,164,192,.2),transparent 72%)}
+/* reflejo que recorre el borde (~10 s) */
+.dx-rim{position:absolute;inset:-1.5px;border-radius:inherit;padding:1.5px;overflow:hidden;pointer-events:none;z-index:3;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.dx-rim i{position:absolute;left:50%;top:50%;width:175%;aspect-ratio:1;margin:-87.5% 0 0 -87.5%;
+  background:conic-gradient(from 0deg,transparent 0deg,transparent 150deg,rgba(212,175,55,.35) 166deg,#E8C766 178deg,rgba(212,175,55,0) 184deg,transparent 330deg,rgba(183,110,121,.3) 347deg,#C98591 359deg,transparent 360deg);
+  animation:dxSpin 10s linear infinite;animation-delay:var(--del,0s)}
+@keyframes dxSpin{to{transform:rotate(360deg)}}
+/* filete interior fino */
+.dx-line{position:absolute;inset:6px;border-radius:calc(var(--dx-r,16px) - 5px);pointer-events:none;z-index:1;border:1px solid rgba(183,110,121,.28);
+  -webkit-mask:linear-gradient(138deg,#000,rgba(0,0,0,.3) 34%,rgba(0,0,0,.3) 66%,#000);mask:linear-gradient(138deg,#000,rgba(0,0,0,.3) 34%,rgba(0,0,0,.3) 66%,#000)}
+/* vidrio: reflejo diagonal cada ~9 s */
+.dx-sheen{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:1}
+.dx-sheen i{position:absolute;top:-30%;bottom:-30%;left:0;width:46%;
+  background:linear-gradient(100deg,transparent,rgba(247,231,206,.12) 30%,rgba(255,240,236,.42) 49%,rgba(244,164,192,.1) 56%,transparent);
+  transform:translateX(-140%) skewX(-16deg);animation:dxGlass 9s cubic-bezier(.5,0,.2,1) infinite;animation-delay:var(--del,0s)}
+@keyframes dxGlass{0%,62%{transform:translateX(-140%) skewX(-16deg)}88%,100%{transform:translateX(340%) skewX(-16deg)}}
+/* la tarjeta del RSVP ya trae su propio filete (::before): se tiñe rosa oro */
+#rsvp .rsvp-card.dx-card::before{border-color:rgba(183,110,121,.3)}
+#rsvp .rsvp-corner path,#rsvp .rsvp-corner circle{stroke:#B76E79;fill:#B76E79}
+#rsvp .rsvp-corner path{fill:none}
+
+/* botones principales con filo de cromo rosa oro (texto sólido, contraste ≥ 4.5:1) */
+.btn-map,.btn-cal{box-shadow:0 0 0 1px rgba(212,175,55,.55),0 10px 24px -10px rgba(125,63,76,.45),inset 0 1px 0 rgba(255,255,255,.34)!important}
+.btn-map,.rsvp-btn{background:linear-gradient(110deg,#4E2F7D 0%,#6d48a6 30%,#8a66c2 48%,#6d48a6 66%,#4E2F7D 100%) padding-box,linear-gradient(115deg,#B76E79,#F7E7CE 30%,#D4AF37 52%,#F2D9A6 74%,#B76E79) border-box!important;background-size:240% 100%,100% 100%!important}
+.btn-cal{background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(115deg,#B76E79,#F7E7CE 30%,#D4AF37 52%,#F2D9A6 74%,#B76E79) border-box!important;background-size:100% 100%,100% 100%!important;animation:none!important;color:#5e3d94}
+.loc-cal-divider,.footer-hr,.nk-line{background:linear-gradient(90deg,transparent 0%,#B76E79 15%,#D4AF37 38%,#F7E7CE 50%,#D4AF37 62%,#B76E79 85%,transparent 100%)!important;background-size:220% 100%!important}
+
+/* datos de lectura en tinta sólida (horas, direcciones, fecha límite) */
+.loc-hours,.loc-city,.rsvp-deadline{-webkit-text-fill-color:currentColor}
+
+/* fuera de pantalla: sin animación (lo controla D-brillo.js con IntersectionObserver) */
+.dx-off .dx-flare b,.dx-off .dx-rim i,.dx-off .dx-sheen i{animation:none!important}
+.dx-off .dx-flare.is-mini b{opacity:0}
+
+@media (prefers-reduced-motion:reduce){
+  .metal,.script-title.metal,.cd-num,.hero-amp,.rsvp-para-nombre{animation:none!important;background-position:50% 0!important}
+  .dx-flare b,.dx-rim i,.dx-sheen i{animation:none!important}
+  .dx-flare b{opacity:.7;transform:none}
+  .dx-flare.is-mini b{opacity:.6}
+}

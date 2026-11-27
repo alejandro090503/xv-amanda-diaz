@@ -1,0 +1,77 @@
+/* INSERTAR: antes de <\/style> (orden de CSS: E-luz.css → E-luz-ajustes.css → D-brillo.css → D-itinerario.css → D-21st.css) · copia FIJA del kit luz-premium.css, solo cambia :root */
+/* ═══ Luz Premium Elysium · aprobados (1, 2, 3, 8, 10, 12, 14) ═══
+   Copiar TAL CUAL. Solo se cambian las variables de color de :root de la invitación:
+   --lp-metal-1..5 (oscuro → brillo → oscuro del metálico), --lp-glow (r,g,b del brillo).
+   Rutas de assets: assets/flare.webp y assets/flare-mini.webp (los del kit, repintados con flares.py). */
+
+:root{
+  --lp-metal-1:#7D3F4C; --lp-metal-2:#B76E79; --lp-metal-3:#F7E7CE; --lp-metal-4:#D4AF37; --lp-metal-5:#9A6A3A;
+  --lp-glow:226,170,160;
+}
+
+/* ── 1 · Destello con fantasmas de lente ──
+   <div class="lp-flare" data-x="18%" data-y="20%" data-s="1"></div> dentro de un contenedor position:relative */
+.lp-flare-wrap{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:hidden}
+.lp-fl{position:absolute;width:0;height:0}
+.lp-fl b{position:absolute;width:calc(220px*var(--s,1));height:calc(220px*var(--s,1));margin:calc(-110px*var(--s,1)) 0 0 calc(-110px*var(--s,1));
+  background:url(assets/flare.webp) center/contain no-repeat;opacity:.5;transform:scale(.72);
+  animation:lpBloom var(--dur,8s) cubic-bezier(.45,0,.3,1) infinite;animation-delay:var(--del,0s)}
+@keyframes lpBloom{0%,34%{opacity:.5;transform:scale(.72)}48%{opacity:1;transform:scale(1.12)}56%{opacity:.88;transform:scale(1)}74%,100%{opacity:.5;transform:scale(.72)}}
+.lp-ghost{position:absolute;border-radius:50%;opacity:0;mix-blend-mode:screen;animation:lpGhost var(--dur,8s) cubic-bezier(.45,0,.3,1) infinite;animation-delay:var(--del,0s)}
+.lp-ghost.hex{border-radius:0;clip-path:polygon(25% 3%,75% 3%,100% 50%,75% 97%,25% 97%,0 50%)}
+@keyframes lpGhost{0%,38%{opacity:0}50%{opacity:var(--o,.35)}62%,100%{opacity:0}}
+
+/* ── 2 · Destellos de diamante en las letras ── (el contenedor del texto lleva class="lp-glints") */
+.lp-glints{position:relative;display:inline-block}
+.lp-glint{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;background:url(assets/flare-mini.webp) center/contain no-repeat;pointer-events:none;z-index:4;opacity:0}
+
+/* ── 3 · Caída temática (canvas) ── <canvas class="lp-caida" data-sprites="assets/p1.webp,assets/p2.webp"></canvas> */
+.lp-caida{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+
+/* ── 8 · Cáusticas de cristal (WebGL) ── <canvas class="lp-causticas"></canvas> dentro de un contenedor relative */
+.lp-causticas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;mix-blend-mode:screen;
+  -webkit-mask-image:radial-gradient(70% 65% at 40% 40%,#000 30%,transparent 80%);mask-image:radial-gradient(70% 65% at 40% 40%,#000 30%,transparent 80%)}
+
+/* ── 10 · Cascada de brillo letra por letra ── (texto con class="lp-cascada"; el JS lo separa en letras) */
+.lp-cascada span{display:inline-block;
+  background-image:linear-gradient(104deg,transparent 30%,rgba(255,255,255,1) 50%,transparent 70%),
+    linear-gradient(178deg,var(--lp-metal-3) 6%,var(--lp-metal-4) 28%,var(--lp-metal-2) 46%,var(--lp-metal-1) 52%,var(--lp-metal-4) 62%,var(--lp-metal-3) 80%,var(--lp-metal-5) 98%);
+  background-size:300% 100%,100% 100%;background-repeat:no-repeat;background-position:150% 0,0 0;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:lpLetra 6s ease-in-out infinite;animation-delay:calc(var(--i)*90ms + var(--lp-del,0s));
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.45))}
+.lp-cascada span.sp{width:.3em}
+.lp-cascada{padding:.22em .45em;margin:-.22em -.45em;line-height:1.25}
+@keyframes lpLetra{0%,8%{background-position:150% 0,0 0}22%,100%{background-position:-60% 0,0 0}}
+/* En fondo claro: el pico del brillo no llega a blanco */
+.lp-claro .lp-cascada span,.lp-cascada.lp-claro span{background-image:linear-gradient(104deg,transparent 30%,var(--lp-metal-4) 50%,transparent 70%),
+    linear-gradient(178deg,var(--lp-metal-2) 6%,var(--lp-metal-1) 40%,var(--lp-metal-5) 62%,var(--lp-metal-1) 98%);filter:none}
+
+/* ── 12 · Niebla en capas ── <div class="lp-niebla"></div> dentro de una sección relative (el JS crea las 3 capas) */
+.lp-niebla{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.lp-niebla i{position:absolute;left:0;right:0;background-repeat:repeat-x;background-size:1024px 100%}
+.lp-niebla i:nth-child(1){top:30%;height:70%;opacity:.55;animation:lpNiebla 60s linear infinite}
+.lp-niebla i:nth-child(2){top:45%;height:60%;opacity:.4;animation:lpNiebla 38s linear infinite reverse}
+.lp-niebla i:nth-child(3){top:60%;height:45%;opacity:.7;animation:lpNiebla 26s linear infinite}
+@keyframes lpNiebla{to{background-position:-1024px 0}}
+
+/* ── 14 · Seda iluminada (WebGL compartido) ── fondo de sección: <canvas class="lp-seda"></canvas> como primer hijo */
+.lp-seda{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:-2}
+/* fundido de la seda hacia el color exacto de la sección vecina (lo crea el JS con LP_CONFIG.borde) */
+.lp-sfade{position:absolute;left:0;right:0;pointer-events:none;z-index:-1}
+.lp-sfade--top{top:0}.lp-sfade--bot{bottom:0}
+
+/* ── 15 · Velo de luz y 17 · Cortina de seda en la unión ──
+   En la sección de ABAJO: data-lp-union="velo" o data-lp-union="seda". El JS crea la capa en su borde superior.
+   Va encima del fundido de color medio entre secciones (no lo sustituye). Colores de la cortina: LP_CONFIG.cortina {sombra,base,luz} (metálico). */
+.lp-union{position:absolute;left:0;right:0;pointer-events:none;z-index:5}
+/* sin mix-blend-mode: la sección tiene isolation:isolate y la mitad que asoma arriba se mezclaría distinto (deja línea) */
+.lp-union--velo{left:0;right:0;top:-130px;height:260px;opacity:0;
+  background:radial-gradient(75% 50% at 50% 50%,rgba(var(--lp-glow),.5),rgba(var(--lp-glow),.16) 50%,rgba(var(--lp-glow),0) 74%)}
+.lp-union--seda{top:-90px;height:180px;
+  -webkit-mask-image:linear-gradient(transparent,#000 40%,#000 60%,transparent);mask-image:linear-gradient(transparent,#000 40%,#000 60%,transparent)}
+.lp-union--seda .lp-seda{z-index:0}
+
+@media (prefers-reduced-motion:reduce){
+  .lp-fl b,.lp-ghost,.lp-cascada span,.lp-niebla i{animation:none!important}
+}

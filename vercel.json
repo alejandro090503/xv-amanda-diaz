@@ -1,0 +1,15 @@
+{
+  "rewrites": [
+    {
+      "source": "/((?!.*\\.[a-z0-9]{1,5}$).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/album",
+      "destination": "https://panel-invitados.vercel.app/subir/xv-amanda-diaz",
+      "permanent": false
+    }
+  ]
+}

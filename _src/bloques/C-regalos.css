@@ -1,0 +1,22 @@
+/* INSERTAR: antes de </style> (única vez en index.html), junto a C-vinilo.css */
+/* ── MESA DE REGALOS ── */
+#regalos{text-align:center}
+#regalos .rg-msg{
+  font-family:var(--serif);font-size:clamp(18px,4.8vw,21px);font-weight:500;line-height:1.7;
+  color:#4a2d7c;max-width:420px;margin:0 auto 30px;
+}
+#regalos .rg-card{
+  position:relative;max-width:380px;margin:0 auto;padding:34px 26px 30px;border-radius:22px;
+  border:1.5px solid transparent;
+  background:linear-gradient(#fff,#fff) padding-box,
+    linear-gradient(115deg,#B76E79 0%,#F7E7CE 24%,#D4AF37 46%,#F7E7CE 66%,#B76E79 100%) border-box;
+  background-size:100% 100%,260% 100%;animation:borderFlow 7s ease-in-out infinite alternate;
+  box-shadow:0 10px 30px rgba(130,92,184,.14);
+}
+#regalos .rg-ic{width:46px;height:46px;display:block;margin:0 auto 14px}
+#regalos .rg-por{
+  font-family:var(--display);font-style:italic;font-weight:600;font-size:clamp(26px,7vw,32px);
+  line-height:1.2;color:#4a2d7c;margin:0 0 8px;
+}
+#regalos .rg-sub{font-family:var(--serif);font-size:17px;font-weight:500;line-height:1.6;color:#5b4a68;margin:0}
+@media (prefers-reduced-motion:reduce){#regalos .rg-card{animation:none}}

@@ -1,0 +1,40 @@
+/* INSERTAR: antes de <\/style> (orden 4 de CSS, después de D-brillo.css) · D-itinerario: horas en Bodoni y estela de luz rosa oro guiada por el scroll (sobre #itinGrid) */
+/* horas: número grande, am/pm en cursiva pequeña (≥16 px), tinta sólida legible */
+.itin-time.dx-h{display:flex;align-items:baseline;justify-content:flex-end;gap:5px;font-family:'Bodoni Moda',Georgia,serif!important;
+  font-style:normal!important;font-weight:500;font-size:28px!important;line-height:1.08;letter-spacing:.005em!important;color:#5e3d94!important;
+  font-variant-numeric:lining-nums;transition:color .6s ease,text-shadow .6s ease;margin-bottom:6px}
+.itin-item--r .itin-time.dx-h{justify-content:flex-start}
+.dx-m{font-family:'Bodoni Moda',Georgia,serif;font-style:italic;font-weight:500;font-size:16px;letter-spacing:.04em;color:#8E4F5B}
+.itin-row-l.is-lit .itin-time.dx-h,.itin-row-r.is-lit .itin-time.dx-h{color:#7D3F4C!important;text-shadow:0 0 14px rgba(212,175,55,.45),0 1px 0 rgba(255,255,255,.8)}
+.itin-row-l.is-lit .dx-m,.itin-row-r.is-lit .dx-m{color:#9A6A3A}
+
+/* riel: la columna original queda como pista tenue rosa oro */
+#itinGrid .itin-spine{background:linear-gradient(to bottom,transparent,rgba(183,110,121,.35) 8%,rgba(183,110,121,.35) 92%,transparent)!important}
+/* línea encendida + cola de luz en 3 capas + destello en la punta (solo transform/opacity) */
+.dx-iline{position:absolute;left:calc(50% - 1px);top:8px;width:2px;height:var(--dx-len,100px);transform-origin:top center;transform:scaleY(0);
+  background:linear-gradient(to bottom,#B76E79,#D4AF37 70%,#F2D9A6);pointer-events:none;z-index:1;border-radius:2px}
+.dx-tail{position:absolute;left:50%;top:0;pointer-events:none;z-index:2;transform-origin:50% 100%;border-radius:99px;opacity:0}
+.dx-tail.t1{width:8px;margin-left:-4px;height:118px;background:linear-gradient(to bottom,rgba(244,164,192,0),rgba(244,164,192,.34))}
+.dx-tail.t2{width:3.5px;margin-left:-1.75px;height:74px;background:linear-gradient(to bottom,rgba(212,175,55,0),rgba(232,199,102,.62))}
+.dx-tail.t3{width:1.8px;margin-left:-.9px;height:34px;background:linear-gradient(to bottom,rgba(255,248,236,0),#FFF6E4)}
+.dx-head{position:absolute;left:50%;top:0;width:0;height:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .35s ease}
+.dx-head.is-on{opacity:1}
+.dx-head b{position:absolute;left:-70px;top:-70px;width:140px;height:140px;background:url(assets/flare.webp) center/contain no-repeat;
+  animation:dxLatido 3.4s ease-in-out infinite}
+@keyframes dxLatido{0%,100%{opacity:.82;transform:scale(.92)}50%{opacity:1;transform:scale(1.06)}}
+
+/* puntos: se encienden con chispa al llegar la luz; al subir se apagan */
+#itinGrid .itin-dot{position:relative;z-index:4;transition:background .55s ease}
+#itinGrid .itin-dot.is-lit{background:radial-gradient(circle at 38% 32%,#FFF8EC 0 26%,#F2D9A6 50%,#B76E79 100%)!important;
+  box-shadow:0 0 0 2px #fff,0 0 0 3.5px #B76E79,0 0 12px 3px rgba(212,175,55,.6),0 0 26px 7px rgba(244,164,192,.38)!important}
+#itinGrid .itin-dot::before{content:'';position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;
+  background:url(assets/flare-mini.webp) center/contain no-repeat;opacity:0;pointer-events:none}
+#itinGrid .itin-dot.is-lit::before{animation:dxChispa 1.15s cubic-bezier(.2,.7,.2,1) 1}
+@keyframes dxChispa{0%{opacity:0;transform:scale(.25) rotate(-24deg)}28%{opacity:1;transform:scale(1.08) rotate(0)}100%{opacity:0;transform:scale(.55) rotate(18deg)}}
+
+@media (max-width:340px){.itin-time.dx-h{font-size:24px!important}.dx-m{font-size:16px}}
+@media (prefers-reduced-motion:reduce){
+  .dx-head,.dx-tail{display:none}
+  #itinGrid .itin-dot.is-lit::before{animation:none}
+  .itin-time.dx-h,#itinGrid .itin-dot{transition:none}
+}

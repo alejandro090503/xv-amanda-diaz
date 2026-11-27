@@ -1,0 +1,22 @@
+/* INSERTAR: antes de <\/style> (orden 2 de CSS, justo después de E-luz.css) · integra la Luz Premium con la plantilla */
+
+/* 14 · la seda sustituye al satinado viejo: se apaga el ::before (gradiente plata + su propio fundido) para que no se encime */
+.satin.lp-has-seda::before{content:none!important;display:none!important;animation:none!important}
+.satin.lp-has-seda{background:var(--bg)!important}
+/* contraste ≥ 4.5:1 sobre la seda lila: textos pequeños en morado más profundo */
+.lp-has-seda .eyebrow,.lp-has-seda .cd-lbl,.lp-has-seda .footer-date,.lp-has-seda .nk-txt--s{color:#6d48a6}
+
+/* 17 · cortina en #itinerario y #rsvp: ≥100 px arriba para que no tape el título; la capa debe asomar hacia arriba */
+#itinerario.lp-con-cortina,#rsvp.lp-con-cortina{padding-top:116px;overflow:visible}
+@supports (overflow:clip){#itinerario.lp-con-cortina,#rsvp.lp-con-cortina{overflow-x:clip}}
+
+/* 12 · niebla solo en la parte baja de la portada */
+#hero .dx-niebla-baja{top:42%}
+
+/* 3 · ya hay pétalos fijos de la plantilla (#petals): se bajan a la mitad para que no se llene con la caída 3D */
+#petals .petal:nth-child(2n){display:none}
+
+/* Nombre del hero en Cormorant (nunca script) con la cascada rosa oro */
+#hero .dx-nombre{font-family:'Cormorant Garamond',Georgia,serif!important;font-weight:600!important;font-style:normal;
+  font-size:clamp(60px,18vw,96px)!important;letter-spacing:.03em;white-space:nowrap;display:block;filter:none!important}
+#hero .lp-glints{display:inline-block;margin-bottom:26px}  /* que "Desliza" no tape el nombre */

@@ -1286,6 +1286,8 @@ body{
 .lp-union--seda{top:-90px;height:180px;
   -webkit-mask-image:linear-gradient(transparent,#000 40%,#000 60%,transparent);mask-image:linear-gradient(transparent,#000 40%,#000 60%,transparent)}
 .lp-union--seda .lp-seda{z-index:0}
+/* Amanda: el velo es luz blanca sobre el lila claro del borde, sin tono propio */
+.lp-union--velo{background:radial-gradient(80% 50% at 50% 50%,rgba(255,255,255,.55),rgba(255,255,255,.18) 50%,rgba(255,255,255,0) 74%)}
 
 @media (prefers-reduced-motion:reduce){
   .lp-fl b,.lp-ghost,.lp-cascada span,.lp-niebla i{animation:none!important}
@@ -1445,6 +1447,11 @@ body{
 #hero{padding-bottom:128px !important}
 .scroll-hint{bottom:80px !important}
 .ink-bg{opacity:.38}
+/* adornos dentro de su sección y con borde fundido: la sección vecina los cortaba en línea recta */
+.adorno.a-sup-der,.adorno.a-sup-izq{top:3%}.adorno.a-inf-izq,.adorno.a-inf-der{bottom:3%}
+.adorno{-webkit-mask-image:radial-gradient(closest-side,#000 55%,transparent);mask-image:radial-gradient(closest-side,#000 55%,transparent)}
+/* uniones sin línea: la tinta termina en 0 justo en el borde de su sección (la vecina la tapaba a medio fundido) */
+.ink-bg{top:0;bottom:0;-webkit-mask-image:linear-gradient(transparent,#000 24%,#000 76%,transparent);mask-image:linear-gradient(transparent,#000 24%,#000 76%,transparent)}
 #dresscode .dc-swatch-dot{box-shadow:0 0 0 2px #fff,0 4px 14px rgba(53,42,61,.25)}
 /* ══ PRINCIPAL: menú abajo al centro + levitación ══ */
 .mx-btn{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(8px);z-index:997;
@@ -2992,10 +2999,11 @@ window.LP_CONFIG = {
     sec.classList.add('lp-has-seda');
   });
 
-  /* 17 · cortina de seda en 2 uniones: entrada de #itinerario y de #rsvp */
+  /* 15 · velo difuminado (sin franja de color) en 2 uniones: entrada de #itinerario y de #rsvp.
+     Corrección 27-nov: la cortina de seda rosa contrastaba entre secciones claras. */
   ['itinerario', 'rsvp'].forEach(function(id){
     var s = document.getElementById(id);
-    if (s){ s.setAttribute('data-lp-union', 'seda'); s.classList.add('lp-con-cortina'); }
+    if (s){ s.setAttribute('data-lp-union', 'velo'); }
   });
 
   /* Portada: niebla lila abajo, caída 3D de pétalos rosa y lila, 1 destello */
